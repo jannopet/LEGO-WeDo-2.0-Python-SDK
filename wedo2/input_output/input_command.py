@@ -1,15 +1,13 @@
 
+HEADER_SIZE = 3
+
+COMMAND_ID_INPUT_VALUE = 0;
+COMMAND_ID_INPUT_FORMAT = 1;
+
+COMMAND_TYPE_READ = 1;
+COMMAND_TYPE_WRITE = 2;
 
 class InputCommand:
-
-    HEADER_SIZE = 3
-
-    COMMAND_ID_INPUT_VALUE = 0;
-    COMMAND_ID_INPUT_FORMAT = 1;
-
-    COMMAND_TYPE_READ = 1;
-    COMMAND_TYPE_WRITE = 2;
-
     
     def __init__(self, command_id, command_type, connect_id, payload_data):
         data = bytearray(HEADER_SIZE + len(payload_data))
