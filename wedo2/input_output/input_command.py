@@ -11,9 +11,6 @@ class InputCommand:
     
     def __init__(self, command_id, command_type, connect_id, payload_data):
         data = bytearray(HEADER_SIZE + len(payload_data))
-        # command_id, command_type ja connect_id on antud sisendina int'idena
-        # Siinkohal teisendatakse int väärtused klassis ByteUtils baitideks ümber
-        # Teoretiseerin, et pythonis lihtsalt int'i bytearray'sse panemine on piisav
         data[0] = command_id
         data[1] = command_type
         data[2] = connect_id

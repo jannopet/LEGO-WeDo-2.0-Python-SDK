@@ -24,7 +24,9 @@ class InputFormatUnit:
             return "SI"
         else: # Unknown value
             return "?"
-    
+
+INPUT_FORMAT_PACKAGE_SIZE = 11
+FORMAT_DATA_SIZE = 8
     
 class InputFormat:
 
@@ -101,12 +103,16 @@ class InputFormat:
 
     def input_format_to_byte_array(self):
         # TODO
+        return None
 
     def __str__(self):
         # TODO
+        return None
 
     def __eq__(self, obj):
         # TODO
+        return None
 
     def hash_code(self):
         # TODO
+        return None
