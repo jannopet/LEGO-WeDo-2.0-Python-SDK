@@ -2,7 +2,6 @@
 import struct
 
 
-
 # Takes a value as an unsigned short, transforms it into an array of two bytes
 # and adds those bytes to the end of the given bytearray 
 def put_unsigned_short(array, value):
@@ -14,5 +13,7 @@ def put_unsigned_short(array, value):
     array[index] = short_array[0]
     array[index+1] = short_array[1]
 
-
+def get_unsigned_int(array):
+    value = struct.unpack("<I", array)[0]
+    return value
     
