@@ -12,9 +12,6 @@ class InputFormatUnit:
     def __init__(self, value):
         self.value = value
 
-    def get_value(self):
-        return self.value
-
     def __str__(self):
         if self.value == 0:
             return "RAW"
@@ -77,8 +74,8 @@ class InputFormat:
             unit = args[4]
             notifications_enabled = args[5]
 
-            return InputFormat(connect_id, io_type.get_value(), mode, delta_interval,
-                               unit.get_value(), notifications_enabled)
+            return InputFormat(connect_id, io_type.value, mode, delta_interval,
+                               unit.value, notifications_enabled)
 
         # Unknown case
         else:               
@@ -91,7 +88,7 @@ class InputFormat:
      
     def input_format_by_setting_mode_and_unit(self, mode, unit):
         return InputFormat(self.connect_id, self.type_id, mode, self.delta_interval,
-                           unit.get_value(), self.notifications_enabled)
+                           unit.value, self.notifications_enabled)
 
     def input_format_by_setting_delta_interval(self, delta_interval):
         return InputFormat(self.connect_id, self.type_id, self.mode, delta_interval,
@@ -102,17 +99,41 @@ class InputFormat:
                            self.unit, notifications_enabled)
 
     def input_format_to_byte_array(self):
-        # TODO
-        return None
+        array = bytearray(FORMAT_DATA_SIZE)
+        array[0] = self.type_id
+        array[1] = self.mode
+        byte_array.put_unsigned_int(array, self.delta_interval)
+        array[6] = self.unit
+        array[7] = self.notifications_enabled
+        
+        return array
 
     def __str__(self):
-        # TODO
-        return None
+        return "InputFormat{" \
+                "revision=" + str(self.revision) + "" \
+                ", connect_id=" + str(self.connect_id) + "" \
+                ", type_id=" + str(self.type_id) + "" \
+                ", mode=" + str(self.mode) + "" \
+                ", delta_interval=" + str(self.delta_interval) + "" \
+                ", unit=" + str(self.unit) + "" \
+                ", notifications_enabled=" + str(self.notifications_enabled) + "" \
+                ", number_of_bytes=" + str(self.number_of_bytes) + '}'
 
     def __eq__(self, obj):
-        # TODO
-        return None
+        try:
+            if self.connect_id != obj.connect_id: return False
+            if self.delta_interval != obj.delta_interval: return False
+            if self.mode != obj.mode: return False
+            if self.notifications_enabled != obj.notifications_enabled: return False
+            if self.number_of_bytes != obj.number_of_bytes: return False
+            if self.revision != obj.revision: return False
+            if self.type_id != obj.type_id: return False
+            if self.unit != obj.unit: return False
 
-    def hash_code(self):
-        # TODO
-        return None
+            return True
+        except:
+            return False
+
+    def __ne__(self, obj):
+        return not self.__eq__(obj)
+

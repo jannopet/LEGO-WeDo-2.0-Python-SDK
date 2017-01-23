@@ -17,3 +17,11 @@ def get_unsigned_int(array):
     value = struct.unpack("<I", array)[0]
     return value
     
+def put_unsigned_int(array, value):
+    int_array = struct.pack("<I", value)
+    index = 0
+    while array[index] != 0:
+        index += 1
+
+    for i in range(4):
+        array[index + i] = int_array[i]
