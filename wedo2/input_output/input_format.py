@@ -1,26 +1,13 @@
 
 from wedo2.utils import byte_utils
+from enum import Enum
 
-
-class InputFormatUnit:
-
+class InputFormatUnit(Enum):
     INPUT_FORMAT_UNIT_RAW = 0
     INPUT_FORMAT_UNIT_PERCENTAGE = 1
     INPUT_FORMAT_UNIT_SI = 2
     INPUT_FORMAT_UNIT_UNKNOWN = 3
 
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        if self.value == 0:
-            return "RAW"
-        elif self.value == 1:
-            return "%"
-        elif self.value == 2:
-            return "SI"
-        else: # Unknown value
-            return "?"
 
 INPUT_FORMAT_PACKAGE_SIZE = 11
 FORMAT_DATA_SIZE = 8

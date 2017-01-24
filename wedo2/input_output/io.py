@@ -4,43 +4,38 @@ class IO(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
-    def write_input_format(new_format, connect_id):
+    def write_input_format(self, new_format, connect_id):
         pass
 
     @abstractmethod
-    def read_input_format_for_connect_id(connect_id):
+    def read_input_format_for_connect_id(self, connect_id):
         pass
 
     @abstractmethod
-    def write_motor_power(power, connect_id):
+    def write_motor_power(self, *args)
+    
+    @abstractmethod
+    def write_piezo_tone_frequency(self, frequency, duration, connect_id):
         pass
 
     @abstractmethod
-    def write_motor_power(power, offset, connect_id):
+    def write_piezo_tone_stop(self, connect_id):
         pass
 
     @abstractmethod
-    def write_piezo_tone_frequency(frequency, duration, connect_id):
+    def write_color(self, red, green, blue, connect_id):
         pass
 
     @abstractmethod
-    def write_piezo_tone_stop(connect_id):
+    def write_color_index(self, index, connect_id):
         pass
 
     @abstractmethod
-    def write_color(red, green, blue, connect_id):
+    def write_data(self, data, connect_id):
         pass
 
     @abstractmethod
-    def write_color_index(index, connect_id):
-        pass
-
-    @abstractmethod
-    def write_data(data, connect_id):
-        pass
-
-    @abstractmethod
-    def read_value_for_connect_id(connect_id):
+    def read_value_for_connect_id(self, connect_id):
         pass
 
     @abstractmethod
