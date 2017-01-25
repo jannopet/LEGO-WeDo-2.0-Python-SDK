@@ -27,7 +27,7 @@ class Motor(LegoService):
     def create_service(connect_info, io):
         return Motor(connect_info, io)
 
-    def get_service_name():
+    def get_service_name(self):
         return SERVICE_MOTOR_NAME
 
     def get_power(self):
@@ -76,7 +76,7 @@ class Motor(LegoService):
 
         # try: handleUpdatedValueData()
 
-    def convert_unsigned_motor_power_to_signed(power, direction):
+    def convert_unsigned_motor_power_to_signed(self, power, direction):
         result_power = 0
         if power < MOTOR_MAX_SPEED:
             result_power = power

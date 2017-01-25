@@ -15,6 +15,7 @@ class LegoService(object):
 
         self.connect_info = connect_info
         self.io = io
+        self.valid_data_formats = set()
 
     def create_service(connect_info, io):
         return LegoService(connect_info, io)
@@ -30,6 +31,7 @@ class LegoService(object):
     def verify_data(self, *args):
         if len(args) == 1:
             data = args[0]
+            # CHECK, WHETHER data != None is okay here
             if data != None and len(self.valid_data_formats) != 0:
                 d_format = self.data_format_for_input_format(self.input_format)
                 if d_format == None:
@@ -62,18 +64,34 @@ class LegoService(object):
         self.io.write_input_format(new_format, self.connect_info.connect_id)
 
 
-    # TODO
+    # Check with various services, if this works as intended
     def get_input_format_mode(self):
-        return None
+        if self.input_format != None:
+            return self.input_format.mode
+        elif self.get_default_input_format() != None:
+            return self.get_default_input_format().mode
+        # LDSDKLogger.d("No input format set, returning mode 0")
+        return 0
 
-    def update_current_input_format_with_new_mode(new_mode):
-        return None
 
-    def add_valid_data_format(d_format):
-        return None
+    def update_current_input_format_with_new_mode(self, new_mode):
+        if self.input_format != None:
+            self.update_input_format(self.input_format.input_format_by_setting_mode(new_mode))
+        elif self.get_default_input_format() != None:
+            self.update_input_format(self.get_default_input_format().input_format_by_setting_mode(new_mode))
+        else:
+            # LDSDKLogger.e("tried to update input format ...")
+                    
 
-    def remove_valid_data_format(d_format):
-        return None
+    def add_valid_data_format(self, d_format):
+        assert d_format != None, "DataFormat cannot be None"
+        self.valid_data_formats.add(d_format)
+
+    def remove_valid_data_format(self, d_format):
+        assert d_format != None, "DataFormat cannot be None"
+        if len(self.valid_data_formats == 0):
+            return
+        self.valid_data_formats.remove(d_format)
 
     # Jällegi, siin tagastatakse valueData.clone()
     def get_value_data(self): 

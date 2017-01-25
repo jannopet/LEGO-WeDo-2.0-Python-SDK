@@ -30,17 +30,19 @@ class PiezoTonePlayer(LegoService):
     def __init__(self, connect_info, io):
         super(PiezoTonePlayer, self).__init__(connect_info, io)
 
-    def create_service(self, connect_info, io):
+    def create_service(connect_info, io):
         return PiezoTonePlayer(connect_info, io)
 
-    def get_service_name():
+    def get_service_name(self):
         return SERVICE_PIEZO_TONE_PLAYER_NAME
 
     def play_frequency(self, frequency, duration):
         if frequency > PIEZO_TONE_MAX_FREQUENCY:
+            # LDSDKLogger.w("cannot play freq")
             frequency = PIEZO_TONE_MAX_FREQUENCY
 
         if duration > PIEZO_TONE_MAX_DURATION:
+            # LDSDKLogger.w("cannot play piezo tone")
             duration = PIEZO_TONE_MAX_DURATION
 
         self.io.write_piezo_tone_frequency(frequency, duration, self.connect_info.connect_id)
