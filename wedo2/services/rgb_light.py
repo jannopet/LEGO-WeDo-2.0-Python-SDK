@@ -26,7 +26,6 @@ class Color(object):
         return Color(a, r, g, b)
 
     
-
 class RGBLightMode(Enum):
     RGB_LIGHT_MODE_DISCRETE = 0
     RGB_LIGHT_MODE_ABSOLUTE = 1
@@ -116,8 +115,18 @@ class RGBLight(LegoService):
         return None
 
     def add_valid_data_formats(self):
-        return None        
-    
+        self.add_valid_data_format(DataFormat.create("Discrete", RGBLightMode.RGB_LIGHT_MODE_DISCRETE.value,
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW, 1, 1)) 
+        self.add_valid_data_format(DataFormat.create("Discrete", RGBLightMode.RGB_LIGHT_MODE_DISCRETE.value,
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE, 1, 1))
+        self.add_valid_data_format(DataFormat.create("Discrete", RGBLightMode.RGB_LIGHT_MODE_DISCRETE.value,
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 1)) 
+        self.add_valid_data_format(DataFormat.create("Absolute", RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE.value,
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW, 1, 3)) 
+        self.add_valid_data_format(DataFormat.create("Absolute", RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE.value,
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE, 1, 3))
+        self.add_valid_data_format(DataFormat.create("Absolute", RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE.value,
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 3)) 
 
     # def __eq__
     

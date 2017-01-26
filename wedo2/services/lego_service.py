@@ -4,6 +4,7 @@ from wedo2.input_output import data_format
 from wedo2.input_output import input_format
 from wedo2.device import connect_info
 from wedo2.device import lego_device
+from wedo2.utils import byte_utils
 
 FIRST_INTERNAL_HUB_INDEX = 50
 
@@ -16,6 +17,8 @@ class LegoService(object):
         self.connect_info = connect_info
         self.io = io
         self.valid_data_formats = set()
+        self.input_format = None
+        self.value_data = None
 
     def create_service(connect_info, io):
         return LegoService(connect_info, io)
@@ -105,17 +108,19 @@ class LegoService(object):
     def get_numbers_from_value_data_set(self, *args):
         return None
     
-    def get_float_from_data(data):
-        return None
-
+    def get_float_from_data(self, data):
+        if len(data) > 4:
+            return 0
+        return byte_utils.get_float(data)
+            
     def get_integer_from_data(data):
         return None
 
     def get_value_as_integer():
         return None
 
-    def get_value_as_float():
-        return None
+    def get_value_as_float(self):
+        return self.get_float_from_data(self.value_data)
 
     def send_read_value_request():
         return None

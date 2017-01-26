@@ -25,7 +25,6 @@ class MotionSensor(LegoService):
     def __init__(self, connect_info, io):
         super(MotionSensor, self).__init__(connect_info, io)
         self.add_valid_data_formats()
-        self.input_format = None    # So that self.input_format != None would be checkable
 
     def create_service(connect_info, io):
         return MotionSensor(connect_info, io)
