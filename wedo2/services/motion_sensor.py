@@ -34,7 +34,7 @@ class MotionSensor(LegoService):
         return SERVICE_MOTION_SENSOR_NAME
 
     def get_default_input_format(self):
-        return InputFormat.inputFormat(self.connect_info.connect_id, self.connect_info.type_id,
+        return InputFormat.input_format(self.connect_info.connect_id, self.connect_info.type_id,
                                        0, 1, InputFormatUnit.INPUT_FORMAT_UNIT_SI, True)
 
     def add_valid_data_formats(self):
