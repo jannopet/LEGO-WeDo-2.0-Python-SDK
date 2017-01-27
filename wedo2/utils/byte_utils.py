@@ -29,3 +29,11 @@ def put_unsigned_int(array, value):
 def get_float(array):
     value = struct.unpack("<f", array)[0]
     return value
+
+def get_short(array):
+    value = struct.unpack("<h", array)[0]
+    return value
+
+def get_int(array):
+    value = struct.unpack("<i", array)[0]
+    return value

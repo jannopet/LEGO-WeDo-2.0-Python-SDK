@@ -2,6 +2,7 @@
 from wedo2.input_output import io
 from wedo2.input_output import data_format
 from wedo2.input_output import input_format
+from input_format import InputFormatUnit
 from wedo2.device import connect_info
 from wedo2.device import lego_device
 from wedo2.utils import byte_utils
@@ -102,22 +103,70 @@ class LegoService(object):
 
     # 0 or 1 argument
     def get_number_from_value_data(self, *args):
-        return None
+        if len(args) == 0:
+            return self.get_number_from_value_data(self.value_data)
+        else: # len(args) == 1
+            data = args[0]
+            values_as_numbers = self.get_numbers_from_value_data_set(data)
+            if values_as_numbers == None:
+                return None
+
+            if len(values_as_numbers) != 1:
+                # LDSDKLogger.w("Cannot get value ....")
+                return None
+            return values_as_numbers[0]
 
     # 0 or 1 argument
     def get_numbers_from_value_data_set(self, *args):
-        return None
+        if len(args) == 0:
+            return self.get_numbers_from_value_data_set(self.value_data)
+        else: # len(args) == 1
+            data_set = args[0]
+            if data_set == None:
+                return None
+
+            d_format = self.data_format_for_input_format(self.input_format)
+            if d_format == None:
+                return None
+
+            try:
+                self.verify_data(data_set, d_format)
+                result_array = []
+
+                current_index = 0
+                for i in range(0, d_format.dataset_count):
+                    current_index = i * d_format.dataset_size
+                    data_set_bytes = bytearray(data_set[current_index : current_index + d_format.dataset_size])
+
+                    if d_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_RAW or d_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE:
+                        result_array.append(self.get_integer_from_data(data_set_bytes))
+                    else:
+                        result_array.append(self.get_float_from_data(data_set_bytes))
+                return result_array
+
+            except:
+                return None
+                    
     
     def get_float_from_data(self, data):
         if len(data) > 4:
             return 0
         return byte_utils.get_float(data)
             
-    def get_integer_from_data(data):
-        return None
+    def get_integer_from_data(self, data):
+        if len(data) == 1:
+            return data[0]
+        elif len(data) == 2:
+            return byte_utils.get_short(data)
+        elif len(data) == 4:
+            return byte_utils.get_int(data)
+        else:
+            # LDSDKLogger.w("Cannot parse service value as ...")
+            return 0
+                
 
-    def get_value_as_integer():
-        return None
+    def get_value_as_integer(self):
+        return self.get_integer_from_data(self.value_data)
 
     def get_value_as_float(self):
         return self.get_float_from_data(self.value_data)
