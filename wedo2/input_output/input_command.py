@@ -23,7 +23,7 @@ class InputCommand:
         self.data = data
 
     def command_write_input_format(f, connect_id):
-        return InputCommand(COMMAND_ID_INPUT_FORMAT, COMMAND_TYPE_WRITE, connect_id, f.write_format_data())
+        return InputCommand(COMMAND_ID_INPUT_FORMAT, COMMAND_TYPE_WRITE, connect_id, f.input_format_to_byte_array())
         
     def command_read_input_format_for_connect_id(connect_id):
         return InputCommand(COMMAND_ID_INPUT_FORMAT, COMMAND_TYPE_READ, connect_id, bytearray(0))
