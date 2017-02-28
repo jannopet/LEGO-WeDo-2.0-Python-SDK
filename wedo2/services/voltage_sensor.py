@@ -1,9 +1,9 @@
 
-from wedo2.services import lego_service
-from lego_service import LegoService
-from wedo2.input_output import input_format
-from input_format import InputFormat
-from input_format import InputFormatUnit
+from wedo2.services.lego_service import LegoService
+#from lego_service import LegoService
+from wedo2.input_output.input_format import InputFormat, InputFormatUnit
+#from input_format import InputFormat
+#from input_format import InputFormatUnit
 
 SERVICE_VOLTAGE_SENSOR_NAME = "Voltage Sensor"
 

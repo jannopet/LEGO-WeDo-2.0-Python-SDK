@@ -1,7 +1,5 @@
 
-from wedo2.services import lego_service
-from lego_service import LegoService
-
+from wedo2.services.lego_service import LegoService
 
 SERVICE_GENERIC_NAME = "Generic IO"
 

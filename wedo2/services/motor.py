@@ -1,7 +1,6 @@
 
-from wedo2.input_output import io
-from wedo2.services import lego_service
-from lego_service import LegoService
+from wedo2.bluetooth.bluetooth_io import BluetoothIO
+from wedo2.services.lego_service import LegoService
 from enum import Enum
 
 MOTOR_MIN_SPEED = 1
@@ -62,13 +61,13 @@ class Motor(LegoService):
         if power == MOTOR_POWER_BRAKE or power == MOTOR_POWER_DRIFT:
             self.io.write_motor_power(power, self.connect_info.connect_id)
         else:
-            offset = 0
-            try:
+            offset = 35
+            #try:
                 # device should be inherited from parent class 'LegoService'
-                if self.device.device_info.firmware_revision.major_version >= 1:
-                    offset = MOTOR_POWER_OFFSET
-            except:
-                raise Exception("NullPointerException")
+            #    if self.device.device_info.firmware_revision.major_version >= 1:
+            #        offset = MOTOR_POWER_OFFSET
+            #except:
+            #    raise Exception("NullPointerException")
 
             self.io.write_motor_power(power, offset, self.connect_info.connect_id)
 

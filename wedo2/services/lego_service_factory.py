@@ -1,28 +1,20 @@
 
-from wedo2.services import generic_service
-from generic_service import GenericService
-from wedo2.services import motion_sensor
-from motion_sensor import MotionSensor
-from wedo2.services import tilt_sensor
-from tilt_sensor import TiltSensor
-from wedo2.services import piezo_tone_player
-from piezo_tone_player import PiezoTonePlayer
-from wedo2.services import motor
-from motor import Motor
-from wedo2.services import current_sensor
-from current_sensor import CurrentSensor
-from wedo2.services import voltage_sensor
-from voltage_sensor import VoltageSensor
-from wedo2.services import rgb_light
-from rgb_light import RGBLight
-from wedo2.device import connect_info
-from connect_info import IOType
+from wedo2.services.generic_service import GenericService
+from wedo2.services.motion_sensor import MotionSensor
+from wedo2.services.tilt_sensor import TiltSensor
+from wedo2.services.piezo_tone_player import PiezoTonePlayer 
+from wedo2.services.motor import Motor
+from wedo2.services.current_sensor import CurrentSensor
+from wedo2.services.voltage_sensor import VoltageSensor
+from wedo2.services.rgb_light import RGBLight
+from wedo2.bluetooth.connect_info import ConnectInfo, IOType
 
 
 class LegoServiceFactory:
 
-    def create(connect_info, io, lego_device):
+    def create(connect_info, io):
         if io == None or connect_info == None:
+            print("Cannot instantiate service")
             # LDSDKLogger.e("Cannot instantiate service...")
             return None
 
@@ -55,8 +47,6 @@ class LegoServiceFactory:
             
         else:
             result = GenericService.create_service(connect_info, io)
-
-        result.set_device(device)
 
         return result
     

@@ -1,11 +1,7 @@
 
-from wedo2.input_output import data_format
-from data_format import DataFormat
-from wedo2.input_output import input_format
-from input_format import InputFormat
-from input_format import InputFormatUnit
-from wedo2.services import lego_service
-from lego_service import LegoService
+from wedo2.input_output.data_format import DataFormat
+from wedo2.input_output.input_format import InputFormat, InputFormatUnit
+from wedo2.services.lego_service import LegoService
 from enum import Enum
 
 

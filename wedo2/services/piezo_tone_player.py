@@ -1,9 +1,7 @@
 
 
-from wedo2.device import connect_info
-from connect_info import ConnectInfo
-from wedo2.services import lego_service
-from lego_service import LegoService
+from wedo2.bluetooth.connect_info import ConnectInfo
+from wedo2.services.lego_service import LegoService
 from enum import Enum
 
 class PiezoTonePlayerNote(Enum):
@@ -50,8 +48,10 @@ class PiezoTonePlayer(LegoService):
     def play_note(self, note, octave, duration):
         if octave > 6:
             # LSDKLogger.w("invalid octave")
+            print("Invalid octave")
         if octave == 6 and note.value > PiezoTonePlayerNote.PIEZO_NOTE_FIS.value:
             # LSDKLogger.w("cannot play note")
+            print("Cannot play note")
 
         base = 440.0
         octaves_above_middle = octave - 4

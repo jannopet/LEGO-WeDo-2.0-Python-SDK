@@ -1,13 +1,9 @@
 
-from wedo2.input_output import lego_service
-from lego_service import LegoService
-from wedo2.device import connect_info
-from wedo2.input_output import data_format
-from data_format import DataFormat
-from wedo2.input_output import io
-from wedo2.input_output import input_format
-from input_format import InputFormat
-from input_format import InputFormatUnit
+from wedo2.services.lego_service import LegoService
+from wedo2.bluetooth.connect_info import ConnectInfo
+from wedo2.input_output.data_format import DataFormat
+from wedo2.bluetooth.bluetooth_io import BluetoothIO
+from wedo2.input_output.input_format import InputFormat, InputFormatUnit
 from enum import Enum
 
 SERVICE_MOTION_SENSOR_NAME = "Motion Sensor"

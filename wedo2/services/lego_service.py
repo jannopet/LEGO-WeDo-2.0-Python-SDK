@@ -1,10 +1,8 @@
 
-from wedo2.input_output import io
-from wedo2.input_output import data_format
-from wedo2.input_output import input_format
-from input_format import InputFormatUnit
-from wedo2.device import connect_info
-from wedo2.device import lego_device
+from wedo2.bluetooth import bluetooth_io
+from wedo2.input_output.data_format import DataFormat
+from wedo2.input_output.input_format import InputFormat, InputFormatUnit
+from wedo2.bluetooth.connect_info import ConnectInfo
 from wedo2.utils import byte_utils
 
 FIRST_INTERNAL_HUB_INDEX = 50
@@ -85,7 +83,7 @@ class LegoService(object):
             self.update_input_format(self.get_default_input_format().input_format_by_setting_mode(new_mode))
         else:
             # LDSDKLogger.e("tried to update input format ...")
-                    
+            print("Couldn't update input format")      
 
     def add_valid_data_format(self, d_format):
         assert d_format != None, "DataFormat cannot be None"
@@ -196,10 +194,18 @@ class LegoService(object):
     # unregisterCallbackListener(listener)
 
     def __eq__(self, obj):
-        return None
+        if obj == None:
+            return False
+        elif self.connect_info != obj.connect_info:
+            return False
+        else:
+            return True
 
     def __ne__(self, obj):
-        return None
+        return not self.__eq__(obj)
+
+    def __hash__(self):
+        return hash(str(self))
 
     
     

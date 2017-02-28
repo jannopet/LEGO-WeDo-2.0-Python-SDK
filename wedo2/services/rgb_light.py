@@ -1,13 +1,9 @@
 
-from wedo2.device import io
-from wedo2.input_output import data_format
-from data_format import DataFormat
-from wedo2.input_output import input_format
-from input_format import InputFormat
-from input_format import InputFormatUnit
+from wedo2.bluetooth.bluetooth_io import BluetoothIO
+from wedo2.input_output.data_format import DataFormat
+from wedo2.input_output.input_format import InputFormat, InputFormatUnit
 from wedo2.utils import byte_utils
-from wedo2.services import lego_service
-from lego_service import LegoService
+from wedo2.services.lego_service import LegoService
 from enum import Enum
 
 # A (possibly) temporary class for representing colors
@@ -35,7 +31,7 @@ SERVICE_RGB_LIGHT_NAME = "RGB Light"
 
 class RGBLight(LegoService):
 
-    def __init__(connect_info, io):
+    def __init__(self, connect_info, io):
         super(RGBLight, self).__init__(connect_info, io)
         self.add_valid_data_formats()
         self.color = None
@@ -63,6 +59,7 @@ class RGBLight(LegoService):
             self.io.write_color(red, green, blue, self.connect_info.connect_id)
         else:
             # LDSDKLogger.w("Ignoring attempt to set RGB color...")
+            print("Ignoring attempt to set RGB color")
 
     def get_default_color(self):
         # Solution for now - needs to be checked later on
@@ -80,6 +77,7 @@ class RGBLight(LegoService):
             self.io.write_color_index(index, self.connect_info.connect_id)
         else:
             # LDSDKLogger.w("Ignoring attempt to set RGB color index ...")
+            print("Ignoring attempt to set RGB color index")
 
     def get_default_color_index(self):
         return 3
@@ -92,6 +90,7 @@ class RGBLight(LegoService):
             self.set_color_index(0)
         else:
             # LDSDKLogger.w("Cannot switch off RGB - unknown mode ...")
+            print("Cannot switch off RGB - unknown mode")
 
     def switch_to_default_color(self):
         if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE:
@@ -100,7 +99,8 @@ class RGBLight(LegoService):
             self.set_color_index(self.get_default_color_index())
         else:
             # LDSDKLogger.w("Cannot switch to default color - unknown mode ...")
-
+            print("Cannot switch to default color - unknown mode")
+            
     # def handle_updated_value_data(self, value_data)
 
     def color_from_data(self, data):

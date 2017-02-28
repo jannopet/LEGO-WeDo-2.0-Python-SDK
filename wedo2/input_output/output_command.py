@@ -33,7 +33,7 @@ class OutputCommand:
 
     
     def command_write_motor_power(power, connect_id):
-        return OutputCommand(connect_id, WRITE_MOTOR_POWER_COMMAND_ID, bytearray([power]))
+        return OutputCommand(connect_id, WRITE_MOTOR_POWER_COMMAND_ID, byte_utils.array_from_signed_value(power))
 
     def command_write_piezo_tone_frequency(frequency, duration, connect_id):
         array = bytearray(4)

@@ -26,6 +26,10 @@ def put_unsigned_int(array, value):
     for i in range(4):
         array[index + i] = int_array[i]
 
+def array_from_signed_value(value):
+    array = struct.pack('b', value)
+    return array
+
 def get_float(array):
     value = struct.unpack("<f", array)[0]
     return value
