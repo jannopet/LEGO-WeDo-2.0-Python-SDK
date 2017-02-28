@@ -88,4 +88,28 @@ class Robot:
             motor.run(MotorDirection.MOTOR_DIRECTION_LEFT, power)
         else:
             print("Motor is not available")
+
+    def turn_motor_right(self, power):
+        motor = self.find_service(1)
+        if motor != None:
+            motor.run(MotorDirection.MOTOR_DIRECTION_RIGHT, power)
+        else:
+            print("Motor is not available")
+
+    def motor_brake(self):
+        motor = self.find_service(1)
+        if motor != None:
+            motor.brake()
+        else:
+            print("Motor is not available")
+
+    def motor_drift(self):
+        motor = self.find_service(1)
+        if motor != None:
+            motor.drift()
+        else:
+            print("Motor is not available")
+
+        
+
     

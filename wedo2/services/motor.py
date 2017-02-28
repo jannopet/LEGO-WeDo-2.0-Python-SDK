@@ -59,7 +59,7 @@ class Motor(LegoService):
 
     def send_power(self, power):
         if power == MOTOR_POWER_BRAKE or power == MOTOR_POWER_DRIFT:
-            self.io.write_motor_power(power, self.connect_info.connect_id)
+            self.io.write_motor_power(power, 0, self.connect_info.connect_id)
         else:
             offset = 35
             #try:
