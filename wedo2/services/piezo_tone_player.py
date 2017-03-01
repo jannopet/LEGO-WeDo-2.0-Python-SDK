@@ -43,7 +43,7 @@ class PiezoTonePlayer(LegoService):
             # LDSDKLogger.w("cannot play piezo tone")
             duration = PIEZO_TONE_MAX_DURATION
 
-        self.io.write_piezo_tone_frequency(frequency, duration, self.connect_info.connect_id)
+        self.io.write_piezo_tone_frequency(round(frequency), duration, self.connect_info.connect_id)
 
     def play_note(self, note, octave, duration):
         if octave > 6:

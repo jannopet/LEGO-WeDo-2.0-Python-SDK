@@ -5,6 +5,7 @@ from wedo2.services.motor import Motor, MotorDirection
 from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.bluetooth import bluetooth_helper
 from wedo2.bluetooth.connect_info import ConnectInfo, IOType
+from wedo2.services.piezo_tone_player import PiezoTonePlayer, PiezoTonePlayerNote
 
 
 #HUB_CHARACTERISTIC_ATTACHED_IO = "0x1527"
@@ -82,17 +83,22 @@ class Robot:
                 return service
         return None
 
+
+    # MOTOR COMMANDS
+
     def turn_motor_left(self, power):
         motor = self.find_service(1)
         if motor != None:
-            motor.run(MotorDirection.MOTOR_DIRECTION_LEFT, power)
+            if self.power_is_positive(power):
+                motor.run(MotorDirection.MOTOR_DIRECTION_LEFT, power)
         else:
             print("Motor is not available")
 
     def turn_motor_right(self, power):
         motor = self.find_service(1)
         if motor != None:
-            motor.run(MotorDirection.MOTOR_DIRECTION_RIGHT, power)
+            if self.power_is_positive(power):
+                motor.run(MotorDirection.MOTOR_DIRECTION_RIGHT, power)
         else:
             print("Motor is not available")
 
@@ -110,6 +116,55 @@ class Robot:
         else:
             print("Motor is not available")
 
-        
+    def power_is_positive(self, power):
+        if power >= 0:
+            return True
+        else:
+            print("Invalid motor power value: motor power should be a positive value")
+            return False
 
+
+    # PIEZO TONE PLAYER COMMANDS
+
+    """
+    Takes three arguments: number of note (1 = C, 2 = C#, 3 = D, ..., 12 = B)
+                           number of octave (1..6)
+                           duration (0..65536 milliseconds)
+    For example,
+    to play a E note of 4th octave for 2 seconds, the command would be
+    play_note(5, 4, 2000)
+    """
+    def play_note(self, note, octave, duration):
+        piezo_tone_player = self.find_service(22)
+        if piezo_tone_player != None:
+            if note > 0 and note <= 12:
+                if duration > 0:
+                    piezo_tone_player.play_note(PiezoTonePlayerNote(note), octave, duration)
+                else:
+                    print("Invalid duration value: duration should be a positive number")
+            else:
+                print("Invalid note value: note value should be between 1 and 12")
+        else:
+            print("Piezo tone player is not available")
+
+    """
+    Takes two arguments: frequency (0..1500)
+                         duration (0..65536 milliseconds)
+    """
+    def play_frequency(self, frequency, duration):
+        piezo_tone_player = self.find_service(22)
+        if piezo_tone_player != None:
+            if frequency > 0 and duration > 0:
+                piezo_tone_player.play_frequency(frequency, duration)
+            else:
+                print("Invalid values: frequency and duration should both be positive values")
+
+    def stop_playing(self):
+        piezo_tone_player = self.find_service(22)
+        if piezo_tone_player != None:
+            piezo_tone_player.stop_playing()
+        else:
+            print("Piezo tone player is not available")
+
+    
     
