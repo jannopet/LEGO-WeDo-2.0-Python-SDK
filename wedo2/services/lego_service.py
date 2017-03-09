@@ -64,7 +64,7 @@ class LegoService(object):
 
     def update_input_format(self, new_format):
         self.io.write_input_format(new_format, self.connect_info.connect_id)
-
+        self.input_format = new_format
 
     # Check with various services, if this works as intended
     def get_input_format_mode(self):

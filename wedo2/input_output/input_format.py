@@ -61,7 +61,7 @@ class InputFormat:
             unit = args[4]
             notifications_enabled = args[5]
 
-            return InputFormat(connect_id, io_type.value, mode, delta_interval,
+            return InputFormat(connect_id, io_type, mode, delta_interval,
                                unit.value, notifications_enabled)
 
         # Unknown case
@@ -89,7 +89,7 @@ class InputFormat:
         array = bytearray(FORMAT_DATA_SIZE)
         array[0] = self.type_id
         array[1] = self.mode
-        byte_array.put_unsigned_int(array, self.delta_interval)
+        byte_utils.put_unsigned_int(array, self.delta_interval)
         array[6] = self.unit
         array[7] = self.notifications_enabled
         

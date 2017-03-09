@@ -6,6 +6,7 @@ from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.bluetooth import bluetooth_helper
 from wedo2.bluetooth.connect_info import ConnectInfo, IOType
 from wedo2.services.piezo_tone_player import PiezoTonePlayer, PiezoTonePlayerNote
+from wedo2.services.rgb_light import RGBLightMode, Color
 
 
 #HUB_CHARACTERISTIC_ATTACHED_IO = "0x1527"
@@ -16,6 +17,7 @@ class Robot:
         self.adapter = pygatt.BGAPIBackend()
         try:
             self.adapter.start()
+            print("Press the Smarthub power button")
             devices = self.adapter.scan()
             device_address = devices[0]['address']
             print(device_address)
@@ -34,7 +36,7 @@ class Robot:
             
     def stop(self):
         self.adapter.stop()
-        print("Connection to robot finished")
+        print("Connection ended")
 
     
     def find_attached_io(self):
@@ -148,7 +150,7 @@ class Robot:
             print("Piezo tone player is not available")
 
     """
-    Takes two arguments: frequency (0..1500)
+    Takes two arguments: frequency (0..1500 Hz)
                          duration (0..65536 milliseconds)
     """
     def play_frequency(self, frequency, duration):
@@ -166,5 +168,27 @@ class Robot:
         else:
             print("Piezo tone player is not available")
 
-    
+
+    # RGB LIGHT COMMANDS
+
+    def set_rgb_light_mode_to_discrete(self):
+        rgb_light = self.find_service(23)
+        if rgb_light != None:
+            rgb_light.set_rgb_mode(RGBLightMode(0))
+
+    def set_rgb_light_mode_to_absolute(self):
+        rgb_light = self.find_service(23)
+        if rgb_light != None:
+            rgb_light.set_rgb_mode(RGBLightMode(1))
+
+    def change_color_index(self, index):
+        rgb_light = self.find_service(23)
+        if rgb_light != None:
+            rgb_light.set_color_index(index)
+
+    def change_color(self, red, green, blue):
+        rgb_light = self.find_service(23)
+        if rgb_light != None:
+            rgb_light.set_color(Color.rgb(red, green, blue))
+
     

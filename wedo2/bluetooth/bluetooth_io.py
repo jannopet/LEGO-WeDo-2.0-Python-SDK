@@ -1,5 +1,6 @@
 
 from wedo2.input_output.output_command import OutputCommand
+from wedo2.input_output.input_command import InputCommand
 from wedo2.bluetooth import bluetooth_helper
 
 
@@ -20,11 +21,15 @@ class BluetoothIO:
 
     # resetStateForConnectId(int connectId)
 
-    # writeInputFormat(InputFormat inputFormat, int connectId)
+    def write_input_format(self, input_format, connect_id):
+        input_command = InputCommand.command_write_input_format(input_format, connect_id)
+        self.write_input_command(input_command.data)
 
     # readInputFormatForConnectId(int connectId)
 
-    # writeInputCommand(InputCommand command)
+    def write_input_command(self, command):
+        char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_INPUT_COMMAND_UUID)
+        self.associated_device.char_write(char_uuid, command)
 
     def write_motor_power(self, power, offset, connect_id):
         is_positive = power >= 0
@@ -49,6 +54,10 @@ class BluetoothIO:
 
     def write_color(self, red, green, blue, connect_id):
         output_command = OutputCommand.command_write_rgb_light(red, green, blue, connect_id)
+        self.write_output_command(output_command.data)
+
+    def write_color_index(self, index, connect_id):
+        output_command = OutputCommand.command_write_rgb_light_index(index, connect_id)
         self.write_output_command(output_command.data)
 
     # writeData(data, connect_id)

@@ -72,7 +72,7 @@ class RGBLight(LegoService):
         self.update_current_input_format_with_new_mode(rgb_mode.value)
 
     def set_color_index(self, index):
-        if self.get_rgb_mode() == RGBLight_mode.RGB_LIGHT_MODE_DISCRETE:
+        if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_DISCRETE:
             self.color_index = index
             self.io.write_color_index(index, self.connect_info.connect_id)
         else:
