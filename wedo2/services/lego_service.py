@@ -16,7 +16,7 @@ class LegoService(object):
         self.connect_info = connect_info
         self.io = io
         self.valid_data_formats = set()
-        self.input_format = None
+        self.input_format = self.get_default_input_format()
         self.value_data = None
 
     def create_service(connect_info, io):
@@ -48,11 +48,13 @@ class LegoService(object):
                 raise Exception("Package sizes don't add up. Something is wrong")
 
     def data_format_for_input_format(self, i_format):
+        #print(str(i_format))
         for d_format in self.valid_data_formats:
+            print(str(d_format))
             if d_format.mode == i_format.mode and d_format.unit == i_format.unit:
-                if (d_format.dataset_size * d_format.dataset_count) != i_format.number_of_bytes:
+                #if (d_format.dataset_size * d_format.dataset_count) != i_format.number_of_bytes:
                     #raise Exception("Data length doesn't add up. Something went wrong")
-                    return None
+                #    return None
                 return d_format
         return None
 
@@ -105,7 +107,9 @@ class LegoService(object):
             return self.get_number_from_value_data(self.value_data)
         else: # len(args) == 1
             data = args[0]
+            #print(data)
             values_as_numbers = self.get_numbers_from_value_data_set(data)
+            #print(values_as_numbers)
             if values_as_numbers == None:
                 return None
 
@@ -125,6 +129,7 @@ class LegoService(object):
 
             d_format = self.data_format_for_input_format(self.input_format)
             if d_format == None:
+                print("d_format was None")
                 return None
 
             try:
@@ -135,10 +140,11 @@ class LegoService(object):
                 for i in range(0, d_format.dataset_count):
                     current_index = i * d_format.dataset_size
                     data_set_bytes = bytearray(data_set[current_index : current_index + d_format.dataset_size])
-
+                    #print(data_set_bytes)
                     if d_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_RAW or d_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE:
                         result_array.append(self.get_integer_from_data(data_set_bytes))
                     else:
+                        print("Starting to add the float value")
                         result_array.append(self.get_float_from_data(data_set_bytes))
                 return result_array
 

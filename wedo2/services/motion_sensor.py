@@ -21,6 +21,8 @@ class MotionSensor(LegoService):
     def __init__(self, connect_info, io):
         super(MotionSensor, self).__init__(connect_info, io)
         self.add_valid_data_formats()
+        #self.input_format = self.get_default_input_format()
+        #self.io.write_input_format(self.get_default_input_format(), connect_info.connect_id)
 
     def create_service(connect_info, io):
         return MotionSensor(connect_info, io)
@@ -34,23 +36,22 @@ class MotionSensor(LegoService):
 
     def add_valid_data_formats(self):
         self.add_valid_data_format(DataFormat.create("Detect", MotionSensorMode.MOTION_SENSOR_MODE_DETECT.value,
-                                   InputFormatUnit.INPUT_FORMAT_UNIT_RAW, 1, 1))
+                                   InputFormatUnit.INPUT_FORMAT_UNIT_RAW.value, 1, 1))
         self.add_valid_data_format(DataFormat.create("Detect", MotionSensorMode.MOTION_SENSOR_MODE_DETECT.value,
-                                   InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE, 1, 1))
+                                   InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE.value, 1, 1))
         self.add_valid_data_format(DataFormat.create("Detect", MotionSensorMode.MOTION_SENSOR_MODE_DETECT.value,
-                                   InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 1))
+                                   InputFormatUnit.INPUT_FORMAT_UNIT_SI.value, 4, 1))
         self.add_valid_data_format(DataFormat.create("Count", MotionSensorMode.MOTION_SENSOR_MODE_COUNT.value,
-                                   InputFormatUnit.INPUT_FORMAT_UNIT_RAW, 4, 1))
+                                   InputFormatUnit.INPUT_FORMAT_UNIT_RAW.value, 4, 1))
         self.add_valid_data_format(DataFormat.create("Count", MotionSensorMode.MOTION_SENSOR_MODE_COUNT.value,
-                                   InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE, 1, 1))
+                                   InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE.value, 1, 1))
         self.add_valid_data_format(DataFormat.create("Count", MotionSensorMode.MOTION_SENSOR_MODE_COUNT.value,
-                                   InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 1))
+                                   InputFormatUnit.INPUT_FORMAT_UNIT_SI.value, 4, 1))
 
     def get_distance(self):
         if self.get_motion_sensor_mode() != MotionSensorMode.MOTION_SENSOR_MODE_DETECT:
             return 0
-
-        number = self.get_number_from_value_data()
+        number = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
         if number != None:
             return number   # number.floatValue() in Java
         else:
@@ -60,7 +61,7 @@ class MotionSensor(LegoService):
         if self.get_motion_sensor_mode() != MotionSensorMode.MOTION_SENSOR_MODE_COUNT:
             return 0
 
-        number = self.get_number_from_value_data()
+        number = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
         if number != None:
             return number   # number.intValue() in Java
         else:

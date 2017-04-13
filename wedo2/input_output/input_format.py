@@ -49,8 +49,8 @@ class InputFormat:
             notifications_enabled = data[9] == 1
             number_of_bytes = data[10]
 
-            return InputFormat(connect_id, type_id, mode, delta_interval, unit,
-                               notifications_enabled, revision, number_of_bytes)
+            return InputFormat(connect_id, type_id, mode, delta_interval, unit.value,
+                               notifications_enabled, number_of_bytes)
 
         # InputFormat from list of arguments
         elif len(args) == 6: 
@@ -89,7 +89,8 @@ class InputFormat:
         array = bytearray(FORMAT_DATA_SIZE)
         array[0] = self.type_id
         array[1] = self.mode
-        byte_utils.put_unsigned_int(array, self.delta_interval)
+        array[2:6] = byte_utils.array_from_unsigned_int(self.delta_interval)
+        #byte_utils.put_unsigned_int(array, self.delta_interval)
         array[6] = self.unit
         array[7] = self.notifications_enabled
         

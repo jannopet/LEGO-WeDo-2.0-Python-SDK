@@ -46,6 +46,8 @@ class TiltSensor(LegoService):
         super(TiltSensor, self).__init__(connect_info, io)
         self.tilt_sensor_mode = TiltSensorMode(self.get_default_input_format().mode).value
         self.add_valid_data_formats()
+        #self.input_format = self.get_default_input_format()
+        #self.io.write_input_format(self.get_default_input_format(), connect_info.connect_id)
 
     def create_service(connect_info, io):
         return TiltSensor(connect_info, io)
@@ -82,18 +84,23 @@ class TiltSensor(LegoService):
         if self.input_format != None:
             if self.input_format.mode != TiltSensorMode.TILT_SENSOR_MODE_TILT.value:
                 return TiltSensorDirection.TILT_SENSOR_DIRECTION_UNKNOWN
-
-        direction_int = self.get_number_from_value_data()
-        if direction_int < 10:
-            return TiltSensorDirection(direction_int)
-        else:
-            return TiltSensorDirection.TILT_SENSOR_DIRECTION_UNKNOWN
+            else:
+                direction_int = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
+                if direction_int != None:
+                    if direction_int < 10:
+                        return TiltSensorDirection(direction_int)
+                    else:
+                        return TiltSensorDirection.TILT_SENSOR_DIRECTION_UNKNOWN
+                else:
+                    return TiltSensorDirection.TILT_SENSOR_DIRECTION_NEUTRAL
+        
+        return TiltSensorDirection.TILT_SENSOR_DIRECTION_UNKNOWN
 
     def get_angle(self):
         if self.input_format.mode != TiltSensorMode.TILT_SENSOR_MODE_ANGLE.value:
             return self.tilt_sensor_angle_zero
-
-        data_set_numbers = self.get_numbers_from_value_data_set()
+            
+        data_set_numbers = self.get_numbers_from_value_data_set(self.io.read_value_for_connect_id(self.connect_info.connect_id))
         if len(data_set_numbers) == 2:
             return self.tilt_sensor_angle_make(data_set_numbers[0], data_set_numbers[1])
 
@@ -109,27 +116,31 @@ class TiltSensor(LegoService):
 
         return self.tilt_sensor_crash_zero
 
+    def set_tilt_sensor_mode(self, mode):
+        self.update_current_input_format_with_new_mode(mode.value)
+        self.tilt_sensor_mode = mode.value
+
     def add_valid_data_formats(self):
         self.add_valid_data_format(DataFormat.create("Angle", TiltSensorMode.TILT_SENSOR_MODE_ANGLE.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW, 1, 2))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW.value, 1, 2))
         self.add_valid_data_format(DataFormat.create("Angle", TiltSensorMode.TILT_SENSOR_MODE_ANGLE.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE, 1, 2))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE.value, 1, 2))
         self.add_valid_data_format(DataFormat.create("Angle", TiltSensorMode.TILT_SENSOR_MODE_ANGLE.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 2))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI.value, 4, 2))
     
         self.add_valid_data_format(DataFormat.create("Tilt", TiltSensorMode.TILT_SENSOR_MODE_TILT.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW, 1, 1))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW.value, 1, 1))
         self.add_valid_data_format(DataFormat.create("Tilt", TiltSensorMode.TILT_SENSOR_MODE_TILT.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE, 1, 1))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE.value, 1, 1))
         self.add_valid_data_format(DataFormat.create("Tilt", TiltSensorMode.TILT_SENSOR_MODE_TILT.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 1))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI.value, 4, 1))
 
         self.add_valid_data_format(DataFormat.create("Crash", TiltSensorMode.TILT_SENSOR_MODE_CRASH.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW, 1, 3))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_RAW.value, 1, 3))
         self.add_valid_data_format(DataFormat.create("Crash", TiltSensorMode.TILT_SENSOR_MODE_CRASH.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE, 1, 3))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE.value, 1, 3))
         self.add_valid_data_format(DataFormat.create("Crash", TiltSensorMode.TILT_SENSOR_MODE_CRASH.value,
-                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 3))
+                                                     InputFormatUnit.INPUT_FORMAT_UNIT_SI.value, 4, 3))
 
      
     # def handle_updated_value_data(value_data)

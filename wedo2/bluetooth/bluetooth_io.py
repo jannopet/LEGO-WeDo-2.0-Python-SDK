@@ -17,15 +17,40 @@ class BluetoothIO:
         self.associated_device = associated_device
 
     
-    # readValueForConnectId(connectId)
+    def read_value_for_connect_id(self, connect_id):
+        input_command = InputCommand.command_read_value_for_connect_id(connect_id)
+        self.write_input_command(input_command.data)
+        value = self.read_input_value()
+        return value
 
-    # resetStateForConnectId(int connectId)
+    def read_input_value(self):
+        char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_INPUT_VALUE_UUID)
+        data = self.associated_device.char_read(char_uuid)
+        print(data, "LENGTH: ", len(data))
+        return data[2:] # Don't need the first two bytes for some reason
+
+    def reset_state_for_connect_id(self, connect_id):
+        reset_bytes = bytearray([0x44, 0x11, 0xAA])
+        self.write_data(reset_bytes, connect_id)
 
     def write_input_format(self, input_format, connect_id):
         input_command = InputCommand.command_write_input_format(input_format, connect_id)
+        #print(input_command.data)
+        #print("---")
+        #for i in range(len(input_command.data)):
+        #    print(input_command.data[i])
         self.write_input_command(input_command.data)
+        #self.reset_state_for_connect_id(connect_id)
 
-    # readInputFormatForConnectId(int connectId)
+    def read_input_format_for_connect_id(self, connect_id):
+        input_command = InputCommand.command_read_input_format_for_connect_id(connect_id)
+        self.write_input_command(input_command.data)
+        return self.read_input_format()
+
+    def read_input_format(self):
+        char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_INPUT_FORMAT_UUID)
+        data = self.associated_device.char_read(char_uuid)
+        return data
 
     def write_input_command(self, command):
         char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_INPUT_COMMAND_UUID)
@@ -60,7 +85,9 @@ class BluetoothIO:
         output_command = OutputCommand.command_write_rgb_light_index(index, connect_id)
         self.write_output_command(output_command.data)
 
-    # writeData(data, connect_id)
+    def write_data(self, data, connect_id):
+        output_command = OutputCommand.command_with_direct_write_through_data(data, connect_id)
+        self.write_output_command(output_command.data)
 
     def write_output_command(self, command):
         char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_OUTPUT_COMMAND_UUID)
