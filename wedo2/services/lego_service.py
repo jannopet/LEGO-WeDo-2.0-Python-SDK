@@ -1,11 +1,9 @@
 
-from wedo2.bluetooth import bluetooth_io
+from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.input_output.data_format import DataFormat
 from wedo2.input_output.input_format import InputFormat, InputFormatUnit
 from wedo2.bluetooth.connect_info import ConnectInfo
 from wedo2.utils import byte_utils
-
-FIRST_INTERNAL_HUB_INDEX = 50
 
 class LegoService(object):
 
@@ -25,15 +23,9 @@ class LegoService(object):
     def set_device(self, device):
         self.device = device
 
-    def is_internal_service(self):
-        return self.connect_info.hub_index >= FIRST_INTERNAL_HUB_INDEX
-
-    # didRequestConnectInfo(io){return this.connectInfo}
-
     def verify_data(self, *args):
         if len(args) == 1:
             data = args[0]
-            # CHECK, WHETHER data != None is okay here
             if data != None and len(self.valid_data_formats) != 0:
                 d_format = self.data_format_for_input_format(self.input_format)
                 if d_format == None:
@@ -48,13 +40,9 @@ class LegoService(object):
                 raise Exception("Package sizes don't add up. Something is wrong")
 
     def data_format_for_input_format(self, i_format):
-        #print(str(i_format))
         for d_format in self.valid_data_formats:
             print(str(d_format))
             if d_format.mode == i_format.mode and d_format.unit == i_format.unit:
-                #if (d_format.dataset_size * d_format.dataset_count) != i_format.number_of_bytes:
-                    #raise Exception("Data length doesn't add up. Something went wrong")
-                #    return None
                 return d_format
         return None
 
@@ -68,7 +56,6 @@ class LegoService(object):
         self.io.write_input_format(new_format, self.connect_info.connect_id)
         self.input_format = new_format
 
-    # Check with various services, if this works as intended
     def get_input_format_mode(self):
         if self.input_format != None:
             return self.input_format.mode
@@ -76,7 +63,6 @@ class LegoService(object):
             return self.get_default_input_format().mode
         # LDSDKLogger.d("No input format set, returning mode 0")
         return 0
-
 
     def update_current_input_format_with_new_mode(self, new_mode):
         if self.input_format != None:
@@ -96,10 +82,6 @@ class LegoService(object):
         if len(self.valid_data_formats == 0):
             return
         self.valid_data_formats.remove(d_format)
-
-    # Jällegi, siin tagastatakse valueData.clone()
-    def get_value_data(self): 
-        return None
 
     # 0 or 1 argument
     def get_number_from_value_data(self, *args):
@@ -140,11 +122,9 @@ class LegoService(object):
                 for i in range(0, d_format.dataset_count):
                     current_index = i * d_format.dataset_size
                     data_set_bytes = bytearray(data_set[current_index : current_index + d_format.dataset_size])
-                    #print(data_set_bytes)
                     if d_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_RAW or d_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_PERCENTAGE:
                         result_array.append(self.get_integer_from_data(data_set_bytes))
                     else:
-                        print("Starting to add the float value")
                         result_array.append(self.get_float_from_data(data_set_bytes))
                 return result_array
 
@@ -166,38 +146,13 @@ class LegoService(object):
             return byte_utils.get_int(data)
         else:
             # LDSDKLogger.w("Cannot parse service value as ...")
-            return 0
-                
+            return 0        
 
     def get_value_as_integer(self):
         return self.get_integer_from_data(self.value_data)
 
     def get_value_as_float(self):
         return self.get_float_from_data(self.value_data)
-
-    def send_read_value_request():
-        return None
-
-    def send_reset_value_request():
-        return None
-
-    def send_reset_state_request():
-        return None
-
-    def write_data(self, data):
-        return None
-
-    # didReceiveInputFormat(io, inputFormat)
-
-    # handleUpdatedInputFormat(inputFormat)
-
-    # didReceiveValueData(io, valueData)
-
-    # handleUpdatedValueData(valueData)
-
-    # registerCallbackListener(listener)
-
-    # unregisterCallbackListener(listener)
 
     def __eq__(self, obj):
         if obj == None:

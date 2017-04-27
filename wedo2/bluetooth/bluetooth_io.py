@@ -1,8 +1,8 @@
 
 from wedo2.input_output.output_command import OutputCommand
 from wedo2.input_output.input_command import InputCommand
+from wedo2.bluetooth.connect_info import ConnectInfo, IOType
 from wedo2.bluetooth import bluetooth_helper
-
 
 CHARACTERISTIC_INPUT_VALUE_UUID    = "0x1560"
 CHARACTERISTIC_INPUT_FORMAT_UUID   = "0x1561"
@@ -15,7 +15,7 @@ class BluetoothIO:
     def __init__(self, associated_device):
         # Associated device is the pygatt backend object we have connected to
         self.associated_device = associated_device
-
+        self.services = []
     
     def read_value_for_connect_id(self, connect_id):
         input_command = InputCommand.command_read_value_for_connect_id(connect_id)
@@ -27,7 +27,7 @@ class BluetoothIO:
         char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_INPUT_VALUE_UUID)
         data = self.associated_device.char_read(char_uuid)
         print(data, "LENGTH: ", len(data))
-        return data[2:] # Don't need the first two bytes for some reason
+        return data[2:]
 
     def reset_state_for_connect_id(self, connect_id):
         reset_bytes = bytearray([0x44, 0x11, 0xAA])
@@ -35,12 +35,7 @@ class BluetoothIO:
 
     def write_input_format(self, input_format, connect_id):
         input_command = InputCommand.command_write_input_format(input_format, connect_id)
-        #print(input_command.data)
-        #print("---")
-        #for i in range(len(input_command.data)):
-        #    print(input_command.data[i])
         self.write_input_command(input_command.data)
-        #self.reset_state_for_connect_id(connect_id)
 
     def read_input_format_for_connect_id(self, connect_id):
         input_command = InputCommand.command_read_input_format_for_connect_id(connect_id)
@@ -93,12 +88,11 @@ class BluetoothIO:
         char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_OUTPUT_COMMAND_UUID)
         self.associated_device.char_write(char_uuid, command)
 
-
+    def subscribe_to_char(self, uuid, callback):
+        self.associated_device.subscribe(uuid, callback)
         
-        
-    
-
-
+    def unsubscribe_from_char(self, uuid):
+        self.associated_device.unsubscribe(uuid)
         
     
         

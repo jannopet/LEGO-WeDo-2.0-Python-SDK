@@ -21,8 +21,7 @@ class MotionSensor(LegoService):
     def __init__(self, connect_info, io):
         super(MotionSensor, self).__init__(connect_info, io)
         self.add_valid_data_formats()
-        #self.input_format = self.get_default_input_format()
-        #self.io.write_input_format(self.get_default_input_format(), connect_info.connect_id)
+        self.io.write_input_format(self.get_default_input_format(), connect_info.connect_id)
 
     def create_service(connect_info, io):
         return MotionSensor(connect_info, io)
@@ -53,7 +52,7 @@ class MotionSensor(LegoService):
             return 0
         number = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
         if number != None:
-            return number   # number.floatValue() in Java
+            return number
         else:
             return 0
 
@@ -63,7 +62,7 @@ class MotionSensor(LegoService):
 
         number = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
         if number != None:
-            return number   # number.intValue() in Java
+            return number
         else:
             return 0
             
@@ -73,9 +72,4 @@ class MotionSensor(LegoService):
 
     def set_motion_sensor_mode(self, motion_sensor_mode):
         self.update_current_input_format_with_new_mode(motion_sensor_mode.value)
-
-   # def handle_updated_value_data(self, value_data):
-
-    # def __eq__(self, obj){return super.equals(o)}
-
 
