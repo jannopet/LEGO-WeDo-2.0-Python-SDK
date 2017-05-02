@@ -5,21 +5,6 @@ from wedo2.input_output.input_format import InputFormat, InputFormatUnit
 from wedo2.utils import byte_utils
 from wedo2.services.lego_service import LegoService
 from enum import Enum
-
-class Color(object):
-
-    def __init__(self, a, r, g, b):
-        self.a = a  # alpha
-        self.r = r  # red
-        self.g = g  # green
-        self.b = b  # blue
-
-    def rgb(r, g, b):
-        return Color(0xFF, r, g, b)
-
-    def argb(a, r, g, b):
-        return Color(a, r, g, b)
-
     
 class RGBLightMode(Enum):
     RGB_LIGHT_MODE_DISCRETE = 0
@@ -33,8 +18,6 @@ class RGBLight(LegoService):
     def __init__(self, connect_info, io):
         super(RGBLight, self).__init__(connect_info, io)
         self.add_valid_data_formats()
-        self.color = None
-        self.color_index = 0
 
     def create_service(connect_info, io):
         return RGBLight(connect_info, io)
@@ -47,19 +30,11 @@ class RGBLight(LegoService):
                                         RGBLightMode.RGB_LIGHT_MODE_DISCRETE.value, 1,
                                         InputFormatUnit.INPUT_FORMAT_UNIT_RAW, True)
 
-    def set_color(self, rgb_color):
+    def set_color(self, red, green, blue):
         if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE:
-            self.color = rgb_color
-            red = rgb_color.r
-            green = rgb_color.g
-            blue = rgb_color.b
-
             self.io.write_color(red, green, blue, self.connect_info.connect_id)
         else:
-            print("Ignoring attempt to set RGB color")
-
-    def get_default_color(self):
-        return Color.argb(0xFF, 0x00, 0x00, 0xFF)
+            print("Cannot change color with RGB values. RGB Light is not set to Absolute Mode.")
 
     def get_rgb_mode(self):
         return RGBLightMode(self.get_input_format_mode())
@@ -69,17 +44,16 @@ class RGBLight(LegoService):
 
     def set_color_index(self, index):
         if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_DISCRETE:
-            self.color_index = index
             self.io.write_color_index(index, self.connect_info.connect_id)
         else:
-            print("Ignoring attempt to set RGB color index")
+            print("Cannot change color with indexed values. RGB Light is not set to Discrete Mode")
 
     def get_default_color_index(self):
         return 3
 
     def switch_off(self):
         if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE:
-            self.set_color(Color.rgb(0, 0, 0))
+            self.set_color(0, 0, 0)
         elif self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_DISCRETE:
             self.set_color_index(0)
         else:
@@ -87,7 +61,7 @@ class RGBLight(LegoService):
 
     def switch_to_default_color(self):
         if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE:
-            self.set_color(self.get_default_color())
+            self.set_color(0, 255, 255)
         elif self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_DISCRETE:
             self.set_color_index(self.get_default_color_index())
         else:
