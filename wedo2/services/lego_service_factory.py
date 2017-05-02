@@ -15,7 +15,6 @@ class LegoServiceFactory:
     def create(connect_info, io):
         if io == None or connect_info == None:
             print("Cannot instantiate service")
-            # LDSDKLogger.e("Cannot instantiate service...")
             return None
 
         result = None

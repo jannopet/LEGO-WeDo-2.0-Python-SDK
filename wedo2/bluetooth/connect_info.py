@@ -14,13 +14,10 @@ class IOType(Enum):
 
 class ConnectInfo:
 
-    # In the official SDK, it also includes hardware and firmware version details
     def __init__(self, connect_id, hub_index, type_id):
         self.connect_id = connect_id
         self.hub_index = hub_index  # Index of the port that the IO is attached to
         self.type_id = type_id
-        #self.hardware_version = hardware_version
-        #self.firmware_version = firmware_version
         self.valid_types = []
         self.populate_valid_types()
 
@@ -46,6 +43,3 @@ class ConnectInfo:
                ", hub_index=" + str(self.hub_index) + "" \
                ", type_id=" + str(self.type_id) + "}"
 
-    
-    # def __eq__(self)    
-        

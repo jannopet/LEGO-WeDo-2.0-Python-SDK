@@ -61,7 +61,3 @@ class OutputCommand:
 
     def command_write_piezo_tone_stop_for_connect_id(connect_id):
         return OutputCommand(connect_id, STOP_PIEZO_TONE_COMMAND_ID, bytearray(0))
-
-    # Javas tagastatakse siinkohal data.clone()
-    def get_data(self):
-        return self.data

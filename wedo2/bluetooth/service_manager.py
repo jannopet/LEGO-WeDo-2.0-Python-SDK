@@ -17,7 +17,7 @@ class ServiceManager:
     def find_available_services(self):
         attached_io_uuid = bluetooth_helper.uuid_with_prefix_custom_base(HUB_CHARACTERISTIC_ATTACHED_IO)
         self.io.subscribe_to_char(attached_io_uuid, self.handle_attached_io_data)
-
+        
         # End subscription when the service for port 6 (RGB LED light) has been found
         while 6 not in self.services_data.keys():
             pass

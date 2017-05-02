@@ -49,12 +49,12 @@ class MotionSensor(LegoService):
 
     def get_distance(self):
         if self.get_motion_sensor_mode() != MotionSensorMode.MOTION_SENSOR_MODE_DETECT:
-            return 0
+            return MAX_DISTANCE
         number = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
         if number != None:
             return number
         else:
-            return 0
+            return MAX_DISTANCE
 
     def get_count(self):
         if self.get_motion_sensor_mode() != MotionSensorMode.MOTION_SENSOR_MODE_COUNT:

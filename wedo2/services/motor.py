@@ -62,18 +62,10 @@ class Motor(LegoService):
             self.io.write_motor_power(power, 0, self.connect_info.connect_id)
         else:
             offset = 35
-            #try:
-                # device should be inherited from parent class 'LegoService'
-            #    if self.device.device_info.firmware_revision.major_version >= 1:
-            #        offset = MOTOR_POWER_OFFSET
-            #except:
-            #    raise Exception("NullPointerException")
 
             self.io.write_motor_power(power, offset, self.connect_info.connect_id)
 
         self.most_recent_send_power = power
-
-        # try: handleUpdatedValueData()
 
     def convert_unsigned_motor_power_to_signed(self, power, direction):
         result_power = 0

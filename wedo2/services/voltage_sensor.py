@@ -1,9 +1,7 @@
 
 from wedo2.services.lego_service import LegoService
-#from lego_service import LegoService
 from wedo2.input_output.input_format import InputFormat, InputFormatUnit
-#from input_format import InputFormat
-#from input_format import InputFormatUnit
+
 
 SERVICE_VOLTAGE_SENSOR_NAME = "Voltage Sensor"
 
@@ -11,6 +9,7 @@ class VoltageSensor(LegoService):
 
     def __init__(self, connect_info, io):
         super(VoltageSensor, self).__init__(connect_info, io)
+        self.io.write_input_format(self.get_default_input_format(), connect_info.connect_id)
 
     def get_service_name(self):
         return SERVICE_VOLTAGE_SENSOR_NAME
@@ -24,10 +23,7 @@ class VoltageSensor(LegoService):
 
     
     def get_value_as_millivolts(self):
-        if self.input_format.mode == 0 and self.input_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_SI:
-            return self.get_value_as_float()
+        if self.input_format.mode == 0 and self.input_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_SI.value:
+            return self.get_float_from_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
         else:
-            # LDSDKLogger.w("Can only retrieve milli volts from ...")
             return 0
-
-    # def handle_updated_value_data(value_data)

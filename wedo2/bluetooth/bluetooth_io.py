@@ -26,7 +26,6 @@ class BluetoothIO:
     def read_input_value(self):
         char_uuid = bluetooth_helper.uuid_with_prefix_custom_base(CHARACTERISTIC_INPUT_VALUE_UUID)
         data = self.associated_device.char_read(char_uuid)
-        print(data, "LENGTH: ", len(data))
         return data[2:]
 
     def reset_state_for_connect_id(self, connect_id):

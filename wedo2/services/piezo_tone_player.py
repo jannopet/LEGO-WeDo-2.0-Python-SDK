@@ -1,5 +1,4 @@
 
-
 from wedo2.bluetooth.connect_info import ConnectInfo
 from wedo2.services.lego_service import LegoService
 from enum import Enum
@@ -36,22 +35,19 @@ class PiezoTonePlayer(LegoService):
 
     def play_frequency(self, frequency, duration):
         if frequency > PIEZO_TONE_MAX_FREQUENCY:
-            # LDSDKLogger.w("cannot play freq")
+            print("Cannot play frequency -- playing maximum frequency instead")
             frequency = PIEZO_TONE_MAX_FREQUENCY
 
         if duration > PIEZO_TONE_MAX_DURATION:
-            # LDSDKLogger.w("cannot play piezo tone")
             duration = PIEZO_TONE_MAX_DURATION
 
         self.io.write_piezo_tone_frequency(round(frequency), duration, self.connect_info.connect_id)
 
     def play_note(self, note, octave, duration):
         if octave > 6:
-            # LSDKLogger.w("invalid octave")
-            print("Invalid octave")
+            print("Invalid octave -- playable octaves go only as high as 6")
         if octave == 6 and note.value > PiezoTonePlayerNote.PIEZO_NOTE_FIS.value:
-            # LSDKLogger.w("cannot play note")
-            print("Cannot play note")
+            print("Cannot play note -- the highest playable note is F# of 6th octave")
 
         base = 440.0
         octaves_above_middle = octave - 4

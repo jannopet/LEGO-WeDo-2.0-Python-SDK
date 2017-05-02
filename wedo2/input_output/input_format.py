@@ -90,7 +90,6 @@ class InputFormat:
         array[0] = self.type_id
         array[1] = self.mode
         array[2:6] = byte_utils.array_from_unsigned_int(self.delta_interval)
-        #byte_utils.put_unsigned_int(array, self.delta_interval)
         array[6] = self.unit
         array[7] = self.notifications_enabled
         

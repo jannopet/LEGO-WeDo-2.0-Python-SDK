@@ -10,7 +10,6 @@ from wedo2.services.tilt_sensor import TiltSensorMode, TiltSensorDirection, Tilt
 from wedo2.services.motion_sensor import MotionSensorMode
 from wedo2.bluetooth.service_manager import ServiceManager
 
-
 class Smarthub:
 
     def __init__(self):
@@ -21,7 +20,8 @@ class Smarthub:
             devices = self.adapter.scan()
             devices = sorted(devices, key=lambda k: k['rssi'], reverse=True)
             self.device_address = devices[0]['address']
-            print(self.device_address)
+            device_name = devices[0]['name']
+            print("Connecting to device '{}'".format(device_name))
             device = None
             while True:
                 try:
@@ -29,14 +29,14 @@ class Smarthub:
                     self.device = device
                     break
                 except:
-                    print("Trying to connect to device...")
+                    print("Trying to connect to device. Try pressing the Smarthub power button again")
                     
             self.io = BluetoothIO(self.device)
             self.service_manager = ServiceManager(self.io)
-            
+            input("Press Enter to continue")
         except Exception as e:
             print(str(e))
-            print("Robot instance was not correctly initalized")
+            print("Smarthub instance was not correctly initialized")
        
             
     def disconnect(self):
@@ -231,10 +231,33 @@ class Smarthub:
         if motion_sensor != None:
             if motion_sensor.get_motion_sensor_mode() == MotionSensorMode.MOTION_SENSOR_MODE_COUNT:
                 count = motion_sensor.get_count()
-                return count
+                return int(count)
             else:
-                print("Cannot return a value. Motion sensor must be set to Detect Mode")
+                print("Cannot return a value. Motion sensor must be set to Count Mode")
                 return None
         else:
             print("Motion Sensor is not available")
             return None
+
+
+    # VOLTAGE COMMANDS
+
+    def get_voltage(self):
+        voltage_sensor = self.service_manager.find_service(IOType.IO_TYPE_VOLTAGE)
+        if voltage_sensor != None:
+            voltage = voltage_sensor.get_value_as_millivolts()
+            return voltage
+        else:
+            print("Voltage sensor is not available")
+            return None
+
+    def get_current(self):
+        current_sensor = self.service_manager.find_service(IOType.IO_TYPE_CURRENT)
+        if current_sensor != None:
+            current = current_sensor.get_value_as_milliamps()
+            return current
+        else:
+            print("Current sensor is not available")
+            return None
+
+        

@@ -9,6 +9,7 @@ class CurrentSensor(LegoService):
 
     def __init__(self, connect_info, io):
         super(CurrentSensor, self).__init__(connect_info, io)
+        self.io.write_input_format(self.get_default_input_format(), connect_info.connect_id)
 
     def get_service_name(self):
         return SERVICE_CURRENT_SENSOR_NAME
@@ -21,12 +22,8 @@ class CurrentSensor(LegoService):
         return CurrentSensor(connect_info, io)
 
     def get_value_as_milliamps(self):
-        if self.input_format != None:
-            if self.input_format.mode == 0 and self.input_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_SI:
-                return self.get_value_as_float()
-            else:
-                # LDSDKLogger.w("Can only retrieve milli amps from Current Sensor when ...")
-                return 0
-        return 0
+        if self.input_format.mode == 0 and self.input_format.unit == InputFormatUnit.INPUT_FORMAT_UNIT_SI.value:
+            return self.get_float_from_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
+        else:
+            return 0
 
-    # def handle_updated_value_data(value_data)

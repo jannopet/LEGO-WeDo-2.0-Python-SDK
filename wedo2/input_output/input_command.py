@@ -30,10 +30,3 @@ class InputCommand:
 
     def command_read_value_for_connect_id(connect_id):
         return InputCommand(COMMAND_ID_INPUT_VALUE, COMMAND_TYPE_READ, connect_id, bytearray(0))
-
-    # Javas tagastatakse siinkohal data.clone() - hetkel proovin lihtsalt data tagastada
-    def get_data(self):
-        if self.data == None:
-            return None
-        else:
-            return self.data

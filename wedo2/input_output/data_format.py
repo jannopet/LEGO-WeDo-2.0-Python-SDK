@@ -20,7 +20,6 @@ class DataFormat:
                 ", dataSetSize=" + str(self.dataset_size) + "" \
                 ", dataSetCount=" + str(self.dataset_count) + '}'
 
-    # Eeldan hetkel, et see on piisav, et toimida samamoodi nagu equals java-s toimib
     def __eq__(self, obj):
         try:
             if self.mode_name != obj.mode_name: return False

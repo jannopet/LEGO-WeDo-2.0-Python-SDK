@@ -41,7 +41,6 @@ class LegoService(object):
 
     def data_format_for_input_format(self, i_format):
         for d_format in self.valid_data_formats:
-            print(str(d_format))
             if d_format.mode == i_format.mode and d_format.unit == i_format.unit:
                 return d_format
         return None
@@ -61,7 +60,6 @@ class LegoService(object):
             return self.input_format.mode
         elif self.get_default_input_format() != None:
             return self.get_default_input_format().mode
-        # LDSDKLogger.d("No input format set, returning mode 0")
         return 0
 
     def update_current_input_format_with_new_mode(self, new_mode):
@@ -70,7 +68,6 @@ class LegoService(object):
         elif self.get_default_input_format() != None:
             self.update_input_format(self.get_default_input_format().input_format_by_setting_mode(new_mode))
         else:
-            # LDSDKLogger.e("tried to update input format ...")
             print("Couldn't update input format")      
 
     def add_valid_data_format(self, d_format):
@@ -89,15 +86,13 @@ class LegoService(object):
             return self.get_number_from_value_data(self.value_data)
         else: # len(args) == 1
             data = args[0]
-            #print(data)
             values_as_numbers = self.get_numbers_from_value_data_set(data)
-            #print(values_as_numbers)
             if values_as_numbers == None:
                 return None
 
             if len(values_as_numbers) != 1:
-                # LDSDKLogger.w("Cannot get value ....")
                 return None
+            
             return values_as_numbers[0]
 
     # 0 or 1 argument
@@ -145,14 +140,7 @@ class LegoService(object):
         elif len(data) == 4:
             return byte_utils.get_int(data)
         else:
-            # LDSDKLogger.w("Cannot parse service value as ...")
             return 0        
-
-    def get_value_as_integer(self):
-        return self.get_integer_from_data(self.value_data)
-
-    def get_value_as_float(self):
-        return self.get_float_from_data(self.value_data)
 
     def __eq__(self, obj):
         if obj == None:

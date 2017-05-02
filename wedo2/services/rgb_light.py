@@ -6,7 +6,6 @@ from wedo2.utils import byte_utils
 from wedo2.services.lego_service import LegoService
 from enum import Enum
 
-# A (possibly) temporary class for representing colors
 class Color(object):
 
     def __init__(self, a, r, g, b):
@@ -51,18 +50,15 @@ class RGBLight(LegoService):
     def set_color(self, rgb_color):
         if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE:
             self.color = rgb_color
-            # Solution for now - needs to be checked later on
             red = rgb_color.r
             green = rgb_color.g
             blue = rgb_color.b
 
             self.io.write_color(red, green, blue, self.connect_info.connect_id)
         else:
-            # LDSDKLogger.w("Ignoring attempt to set RGB color...")
             print("Ignoring attempt to set RGB color")
 
     def get_default_color(self):
-        # Solution for now - needs to be checked later on
         return Color.argb(0xFF, 0x00, 0x00, 0xFF)
 
     def get_rgb_mode(self):
@@ -76,7 +72,6 @@ class RGBLight(LegoService):
             self.color_index = index
             self.io.write_color_index(index, self.connect_info.connect_id)
         else:
-            # LDSDKLogger.w("Ignoring attempt to set RGB color index ...")
             print("Ignoring attempt to set RGB color index")
 
     def get_default_color_index(self):
@@ -84,12 +79,10 @@ class RGBLight(LegoService):
 
     def switch_off(self):
         if self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE:
-            # Solution for now - needs to be checked later on
             self.set_color(Color.rgb(0, 0, 0))
         elif self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_DISCRETE:
             self.set_color_index(0)
         else:
-            # LDSDKLogger.w("Cannot switch off RGB - unknown mode ...")
             print("Cannot switch off RGB - unknown mode")
 
     def switch_to_default_color(self):
@@ -98,20 +91,16 @@ class RGBLight(LegoService):
         elif self.get_rgb_mode() == RGBLightMode.RGB_LIGHT_MODE_DISCRETE:
             self.set_color_index(self.get_default_color_index())
         else:
-            # LDSDKLogger.w("Cannot switch to default color - unknown mode ...")
             print("Cannot switch to default color - unknown mode")
             
-    # def handle_updated_value_data(self, value_data)
 
     def color_from_data(self, data):
         if len(data) == 3:
             red = data[0]
             green = data[1]
             blue = data[2]
-            # Solution for now - needs to be checked later on
             return Color.rgb(red, green, blue)
 
-        # LDSDKLogger.w("Cannot create color from data ...")
         return None
 
     def add_valid_data_formats(self):
@@ -128,9 +117,3 @@ class RGBLight(LegoService):
         self.add_valid_data_format(DataFormat.create("Absolute", RGBLightMode.RGB_LIGHT_MODE_ABSOLUTE.value,
                                                      InputFormatUnit.INPUT_FORMAT_UNIT_SI, 4, 3)) 
 
-    # def __eq__
-    
-
-    
-    
-    
