@@ -15,6 +15,7 @@ WRITE_DIRECT_ID = 0x05
 COMMAND_PAYLOAD_SIZE_PIEZO = 4
 COMMAND_PAYLOAD_SIZE_RGB_LIGHT = 3
 
+
 class OutputCommand:
 
     def __init__(self, connect_id, command_id, payload_data):
@@ -30,7 +31,6 @@ class OutputCommand:
             index += 1
 
         self.data = data
-
     
     def command_write_motor_power(power, connect_id):
         return OutputCommand(connect_id, WRITE_MOTOR_POWER_COMMAND_ID, byte_utils.array_from_signed_value(power))

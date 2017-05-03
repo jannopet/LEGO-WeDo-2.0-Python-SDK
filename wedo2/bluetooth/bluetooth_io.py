@@ -1,12 +1,11 @@
 
 from wedo2.input_output.output_command import OutputCommand
 from wedo2.input_output.input_command import InputCommand
-from wedo2.bluetooth.connect_info import ConnectInfo, IOType
 from wedo2.bluetooth import bluetooth_helper
 
-CHARACTERISTIC_INPUT_VALUE_UUID    = "0x1560"
-CHARACTERISTIC_INPUT_FORMAT_UUID   = "0x1561"
-CHARACTERISTIC_INPUT_COMMAND_UUID  = "0x1563"
+CHARACTERISTIC_INPUT_VALUE_UUID = "0x1560"
+CHARACTERISTIC_INPUT_FORMAT_UUID = "0x1561"
+CHARACTERISTIC_INPUT_COMMAND_UUID = "0x1563"
 CHARACTERISTIC_OUTPUT_COMMAND_UUID = "0x1565"
 
 

@@ -1,14 +1,13 @@
 
 from wedo2.services.lego_service import LegoService
-from wedo2.bluetooth.connect_info import ConnectInfo
 from wedo2.input_output.data_format import DataFormat
-from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.input_output.input_format import InputFormat, InputFormatUnit
 from enum import Enum
 
 SERVICE_MOTION_SENSOR_NAME = "Motion Sensor"
 MAX_DISTANCE = 10
 MIN_DISTANCE = 0
+
 
 class MotionSensorMode(Enum):
     MOTION_SENSOR_MODE_DETECT = 0
@@ -31,7 +30,7 @@ class MotionSensor(LegoService):
 
     def get_default_input_format(self):
         return InputFormat.input_format(self.connect_info.connect_id, self.connect_info.type_id,
-                                       0, 1, InputFormatUnit.INPUT_FORMAT_UNIT_SI, True)
+                                        0, 1, InputFormatUnit.INPUT_FORMAT_UNIT_SI, True)
 
     def add_valid_data_formats(self):
         self.add_valid_data_format(DataFormat.create("Detect", MotionSensorMode.MOTION_SENSOR_MODE_DETECT.value,
@@ -53,7 +52,7 @@ class MotionSensor(LegoService):
             return None
         else:
             number = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
-            if number != None:
+            if number is not None:
                 return number
             else:
                 return MAX_DISTANCE
@@ -64,11 +63,10 @@ class MotionSensor(LegoService):
             return None
         else:
             number = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
-            if number != None:
+            if number is not None:
                 return int(number)
             else:
                 return None
-            
 
     def get_motion_sensor_mode(self):
         return MotionSensorMode(self.get_input_format_mode())

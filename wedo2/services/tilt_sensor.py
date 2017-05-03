@@ -4,8 +4,8 @@ from wedo2.input_output.input_format import InputFormat, InputFormatUnit
 from wedo2.services.lego_service import LegoService
 from enum import Enum
 
-
 SERVICE_TILT_SENSOR_NAME = "Tilt Sensor"
+
 
 class TiltSensorDirection(Enum):
     TILT_SENSOR_DIRECTION_NEUTRAL = 0
@@ -22,12 +22,14 @@ class TiltSensorMode(Enum):
     TILT_SENSOR_MODE_CRASH = 2
     TILT_SENSOR_MODE_UNKNOWN = 4
 
+
 class TiltSensorAngle(object):
     x = 0
     y = 0
 
     def __str__(self):
         return "[{0}, {1}]".format(self.x, self.y)
+
 
 class TiltSensor(LegoService):
 
@@ -56,12 +58,12 @@ class TiltSensor(LegoService):
         return angle
         
     def get_direction(self):
-        if self.input_format != None:
+        if self.input_format is not None:
             if self.input_format.mode != TiltSensorMode.TILT_SENSOR_MODE_TILT.value:
                 return TiltSensorDirection.TILT_SENSOR_DIRECTION_UNKNOWN
             else:
                 direction_int = self.get_number_from_value_data(self.io.read_value_for_connect_id(self.connect_info.connect_id))
-                if direction_int != None:
+                if direction_int is not None:
                     if direction_int < 10:
                         return TiltSensorDirection(direction_int)
                     else:

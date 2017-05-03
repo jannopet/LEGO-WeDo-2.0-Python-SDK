@@ -1,5 +1,4 @@
 
-from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.services.lego_service import LegoService
 from enum import Enum
 
@@ -10,6 +9,7 @@ MOTOR_POWER_DRIFT = 0
 
 MOTOR_POWER_OFFSET = 35
 SERVICE_MOTOR_NAME = "Motor"
+
 
 class MotorDirection(Enum):
     MOTOR_DIRECTION_DRIFTING = 0
@@ -31,7 +31,7 @@ class Motor(LegoService):
 
     def get_power(self):
         if self.most_recent_send_power == MOTOR_POWER_BRAKE or \
-            self.most_recent_send_power == MOTOR_POWER_DRIFT:
+                self.most_recent_send_power == MOTOR_POWER_DRIFT:
             return 0
         return abs(self.most_recent_send_power)
 
@@ -47,15 +47,12 @@ class Motor(LegoService):
         else:
             converted_power = self.convert_unsigned_motor_power_to_signed(power, direction)
             self.send_power(converted_power)
-            self.direction = direction
 
     def brake(self):
         self.send_power(MOTOR_POWER_BRAKE)
-        self.direction = MotorDirection.MOTOR_DIRECTION_BRAKING
 
     def drift(self):
         self.send_power(MOTOR_POWER_DRIFT)
-        self.direction = MotorDirection.MOTOR_DIRECTION_DRIFTING
 
     def send_power(self, power):
         if power == MOTOR_POWER_BRAKE or power == MOTOR_POWER_DRIFT:
@@ -64,8 +61,6 @@ class Motor(LegoService):
             offset = 35
 
             self.io.write_motor_power(power, offset, self.connect_info.connect_id)
-
-        self.most_recent_send_power = power
 
     def convert_unsigned_motor_power_to_signed(self, power, direction):
         result_power = 0
@@ -79,7 +74,3 @@ class Motor(LegoService):
 
         return result_power
 
-        
-
-        
-            

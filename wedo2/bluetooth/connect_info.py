@@ -1,6 +1,7 @@
 
 from enum import Enum
 
+
 class IOType(Enum):
     IO_TYPE_MOTOR = 1
     IO_TYPE_VOLTAGE = 20

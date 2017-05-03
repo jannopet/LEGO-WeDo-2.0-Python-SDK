@@ -3,6 +3,7 @@ from wedo2.services.lego_service import LegoService
 
 SERVICE_GENERIC_NAME = "Generic IO"
 
+
 class GenericService(LegoService):
 
     def __init__(self, connect_info, io):
@@ -17,4 +18,3 @@ class GenericService(LegoService):
     def create_service(connect_info, io):
         return GenericService(connect_info, io)
 
-    

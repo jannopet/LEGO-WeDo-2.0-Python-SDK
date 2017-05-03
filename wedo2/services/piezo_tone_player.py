@@ -1,7 +1,7 @@
 
-from wedo2.bluetooth.connect_info import ConnectInfo
 from wedo2.services.lego_service import LegoService
 from enum import Enum
+
 
 class PiezoTonePlayerNote(Enum):
     PIEZO_NOTE_C = 1    # C
@@ -21,6 +21,7 @@ PIEZO_TONE_MAX_FREQUENCY = 1500
 PIEZO_TONE_MAX_DURATION = 65536
 
 SERVICE_PIEZO_TONE_PLAYER_NAME = "Piezo"
+
 
 class PiezoTonePlayer(LegoService):
 
@@ -59,5 +60,3 @@ class PiezoTonePlayer(LegoService):
 
     def stop_playing(self):
         self.io.write_piezo_tone_stop(self.connect_info.connect_id)
-        
-        

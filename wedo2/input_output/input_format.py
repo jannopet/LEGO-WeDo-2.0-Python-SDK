@@ -2,6 +2,7 @@
 from wedo2.utils import byte_utils
 from enum import Enum
 
+
 class InputFormatUnit(Enum):
     INPUT_FORMAT_UNIT_RAW = 0
     INPUT_FORMAT_UNIT_PERCENTAGE = 1
@@ -11,7 +12,8 @@ class InputFormatUnit(Enum):
 
 INPUT_FORMAT_PACKAGE_SIZE = 11
 FORMAT_DATA_SIZE = 8
-    
+
+
 class InputFormat:
 
     INPUT_FORMAT_PACKAGE_SIZE = 11
@@ -28,13 +30,12 @@ class InputFormat:
         self.revision = revision
         self.number_of_bytes= number_of_bytes
 
-
     def input_format(*args):
 
         # InputFormat from bytearray
         if len(args) == 1:  
             data = args[0]
-            if data == None:
+            if data is None:
                 return None
 
             if len(data) != INPUT_FORMAT_PACKAGE_SIZE:
@@ -67,8 +68,7 @@ class InputFormat:
         # Unknown case
         else:               
             return None
-            
-        
+
     def input_format_by_setting_mode(self, mode):
         return InputFormat(self.connect_id, self.type_id, mode, self.delta_interval,
                            self.unit, self.notifications_enabled)
@@ -108,15 +108,22 @@ class InputFormat:
 
     def __eq__(self, obj):
         try:
-            if self.connect_id != obj.connect_id: return False
-            if self.delta_interval != obj.delta_interval: return False
-            if self.mode != obj.mode: return False
-            if self.notifications_enabled != obj.notifications_enabled: return False
-            if self.number_of_bytes != obj.number_of_bytes: return False
-            if self.revision != obj.revision: return False
-            if self.type_id != obj.type_id: return False
-            if self.unit != obj.unit: return False
-
+            if self.connect_id != obj.connect_id:
+                return False
+            if self.delta_interval != obj.delta_interval:
+                return False
+            if self.mode != obj.mode:
+                return False
+            if self.notifications_enabled != obj.notifications_enabled:
+                return False
+            if self.number_of_bytes != obj.number_of_bytes:
+                return False
+            if self.revision != obj.revision:
+                return False
+            if self.type_id != obj.type_id:
+                return False
+            if self.unit != obj.unit:
+                return False
             return True
         except:
             return False

@@ -1,17 +1,17 @@
 
-from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.input_output.data_format import DataFormat
 from wedo2.input_output.input_format import InputFormat, InputFormatUnit
-from wedo2.utils import byte_utils
 from wedo2.services.lego_service import LegoService
 from enum import Enum
-    
+
+
 class RGBLightMode(Enum):
     RGB_LIGHT_MODE_DISCRETE = 0
     RGB_LIGHT_MODE_ABSOLUTE = 1
     RGB_LIGHT_MODE_UNKNOWN = 2
 
 SERVICE_RGB_LIGHT_NAME = "RGB Light"
+
 
 class RGBLight(LegoService):
 
@@ -66,16 +66,6 @@ class RGBLight(LegoService):
             self.set_color_index(self.get_default_color_index())
         else:
             print("Cannot switch to default color - unknown mode")
-            
-
-    def color_from_data(self, data):
-        if len(data) == 3:
-            red = data[0]
-            green = data[1]
-            blue = data[2]
-            return Color.rgb(red, green, blue)
-
-        return None
 
     def add_valid_data_formats(self):
         self.add_valid_data_format(DataFormat.create("Discrete", RGBLightMode.RGB_LIGHT_MODE_DISCRETE.value,

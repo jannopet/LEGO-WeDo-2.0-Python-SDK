@@ -1,10 +1,10 @@
 
-from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.bluetooth import bluetooth_helper
-from wedo2.bluetooth.connect_info import ConnectInfo, IOType
+from wedo2.bluetooth.connect_info import ConnectInfo
 from wedo2.services.lego_service_factory import LegoServiceFactory
 
 HUB_CHARACTERISTIC_ATTACHED_IO = "0x1527"
+
 
 class ServiceManager:
 
@@ -50,5 +50,3 @@ class ServiceManager:
             connect_info = ConnectInfo(connect_id, hub_index, io_type)
             
             self.services_data[connect_id] = connect_info
-
-    
