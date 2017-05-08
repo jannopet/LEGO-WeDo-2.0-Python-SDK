@@ -9,37 +9,36 @@ from wedo2.services.motion_sensor import MotionSensorMode
 from wedo2.bluetooth.service_manager import ServiceManager
 
 
-class Smarthub:
+class BLED112:
 
     def __init__(self):
         self.adapter = pygatt.BGAPIBackend()
+        self.adapter.start()
+
+
+class Smarthub:
+
+    def __init__(self, ble):
+        self.adapter = ble.adapter
+        self.io = None
+        self.service_manager = None
+        self.device = None
+
+    def connect(self):
+        devices = self.adapter.scan(1)
+        devices = sorted(devices, key=lambda k: k['rssi'], reverse=True)
+        device_address = devices[0]['address']
         try:
-            self.adapter.start()
-            print("Press the Smarthub power button")
-            devices = self.adapter.scan()
-            devices = sorted(devices, key=lambda k: k['rssi'], reverse=True)
-            self.device_address = devices[0]['address']
-            device_name = devices[0]['name']
-            print("Connecting to device '{}'".format(device_name))
-            device = None
-            while True:
-                try:
-                    device = self.adapter.connect(self.device_address)
-                    self.device = device
-                    break
-                except:
-                    print("Trying to connect to device. Try pressing the Smarthub power button again")
-                    
+            device = self.adapter.connect(device_address)
+            self.device = device
             self.io = BluetoothIO(self.device)
             self.service_manager = ServiceManager(self.io)
-            input("Press Enter to continue")
-        except Exception as e:
-            print(str(e))
-            print("Smarthub instance was not correctly initialized")
+            return True
+        except:
+            return False
 
     def disconnect(self):
         self.adapter.stop()
-        print("Connection ended")
 
     # MOTOR COMMANDS
 
