@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='wedo2',
-    version='1.0',
+    version='1.1',
     description='Python SDK for LEGO WeDo 2.0',
     long_description='A Python SDK, which provides an API for connecting and controlling LEGO WeDo 2.0 Smarthubs. Requires BLED112 Bluetooth LE module.',
     url='https://github.com/jannopet/LEGO-WeDo-2.0-Python-SDK',
@@ -34,6 +34,6 @@ setup(
         "wedo2.services",
         "wedo2.utils"
     ],
-    install_requires=['pygatt']
+    install_requires=['pygatt==3.1.1']
 )
 

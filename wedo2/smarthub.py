@@ -1,4 +1,4 @@
-import pygatt
+from pygatt.backends.bgapi.bgapi import *
 from wedo2.services.motor import MotorDirection
 from wedo2.bluetooth.bluetooth_io import BluetoothIO
 from wedo2.bluetooth.connect_info import IOType
@@ -9,36 +9,30 @@ from wedo2.services.motion_sensor import MotionSensorMode
 from wedo2.bluetooth.service_manager import ServiceManager
 
 
-class BLED112:
-
-    def __init__(self):
-        self.adapter = pygatt.BGAPIBackend()
-        self.adapter.start()
+adapter = None
 
 
 class Smarthub:
 
-    def __init__(self, ble):
-        self.adapter = ble.adapter
+    def __init__(self):
+        global adapter
+        if adapter is None:
+            adapter = _Patched_BGAPIBackend()
+            adapter.start()
+
         self.io = None
         self.service_manager = None
         self.device = None
 
-    def connect(self):
-        devices = self.adapter.scan(1)
+        devices = adapter.scan(1)
         devices = sorted(devices, key=lambda k: k['rssi'], reverse=True)
         device_address = devices[0]['address']
-        try:
-            device = self.adapter.connect(device_address)
-            self.device = device
-            self.io = BluetoothIO(self.device)
-            self.service_manager = ServiceManager(self.io)
-            return True
-        except:
-            return False
+        self.device = adapter.connect(device_address)
+        self.io = BluetoothIO(self.device)
+        self.service_manager = ServiceManager(self.io)
 
     def disconnect(self):
-        self.adapter.stop()
+        adapter.stop()
 
     # MOTOR COMMANDS
 
@@ -316,3 +310,44 @@ class Smarthub:
         else:
             print("Current sensor is not available")
             return None
+
+
+# A temporary pygatt patch
+class _Patched_BGAPIBackend(BGAPIBackend):
+
+    def _open_serial_port(self):
+        """
+        Open a connection to the named serial port, or auto-detect the first
+        port matching the BLED device. This will wait until data can actually be
+        read from the connection, so it will not return until the device is
+        fully booted.
+
+        Raises a NotConnectedError if the device cannot connect after 10
+        attempts, with a short pause in between each attempt.
+        """
+        for attempt in range(MAX_RECONNECTION_ATTEMPTS):
+            try:
+                serial_port = self._serial_port or self._detect_device_port()
+                self._ser = None
+
+                log.debug("Attempting to connect to serial port after "
+                          "restarting device")
+                self._ser = serial.Serial(serial_port, baudrate=115200,
+                                          timeout=0.25)
+                # Wait until we can actually read from the device
+                self._ser.read()
+                break
+            except (BGAPIError, serial.serialutil.SerialException,
+                    serial_exception):
+                if self._ser:
+                    self._ser.close()
+                """
+                elif attempt == 0:
+                    raise NotConnectedError(
+                        "No BGAPI compatible device detected")
+                """
+                self._ser = None
+                time.sleep(0.25)
+        else:
+            raise NotConnectedError("Unable to reconnect with USB "
+                                    "device after rebooting")
